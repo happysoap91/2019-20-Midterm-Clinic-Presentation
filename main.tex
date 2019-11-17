@@ -1,0 +1,46 @@
+\documentclass{beamer}
+% * <nuevecuervos@gmail.com> 2017-11-10T23:57:23.576Z:
+%
+% ^.
+\usetheme{Stockton}
+\usepackage{tikz}
+\usepackage{tkz-berge}
+\usepackage{pgf}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{color}
+\usepackage{media9}
+\usepackage{wrapfig}
+\usetikzlibrary{shapes.geometric,arrows}
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
+
+\setbeamercovered{transparent}
+\title[Predicting Atomic Scale Fracture in Silica-Based Glasses]{Graph Theoretic Machine Learning Approaches to Predict Atomic Scale Fracture in Silica-Based Glasses}
+\subtitle[SNL]{Sandia National Laboratories}
+
+
+
+\author[S. Cheng, Y. Kim, A. Lawrence, C. Oroz]{\textbf{Students:} Shu Cheng, Yuri Kim, Adam Lawrence, Corina Oroz \textbf{Faculty Advisor:} Allon Percus \\ \textbf{Liaisons:} Mark Wilson, Thomas Hardin}
+\institute[CGU]{Claremont Graduate University}
+
+\date{November 20, 2019}
+
+\begin{document}
+\frame{\titlepage}
+
+\input{introduction}
+\input{model}
+\input{status}
+%\input{bibliography}
+
+\end{document} 
