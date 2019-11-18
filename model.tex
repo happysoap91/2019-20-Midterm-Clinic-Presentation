@@ -1,14 +1,35 @@
-\section{Model}
 
+
+
+
+
+
+\section{Model}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Data}
 \frame
 {
 \frametitle{Data}
 \begin{block}{}
-Sandia has provided MD simulation results which we will use as training data for our ML models. We also have a set of Python scripts to help us process and load the data into certain data structures/models that we create.
+\begin{itemize}
+    \item
+Sandia has provided MD simulation results which we will use as training data for our ML models. 
+\end{itemize}
+
+
+\end{block}
+
+\begin{block}{}
+\begin{itemize}
+    \item The two types of simulations are:
+    \begin{itemize}
+        \item Free Surfaces
+        \item Fully Periodic
+    \end{itemize}
+\end{itemize}
 \end{block}
 }
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame
 {
 \frametitle{Features}
@@ -20,47 +41,34 @@ Data includes features such as:
     \item stress tensor
     \item bond connectivity
     \item newly formed/broken bonds
-    \item $SiO_n$ distribution
-    \item $Q_n$ distribution
-    \item $nuc_v$
+    \item Coordination Number
+    \item Number of Bridging Oxygens
+    \item Volume Surrounding atom
 \end{itemize}
 \end{block}
 }
-
-\frame
-{
-  \frametitle{Example of Data}
-  \begin{block}{}
-
-			\begin{figure}[h]
-				\centering
-				\includegraphics[width=.5\textwidth]{Q_n.png}
-			\end{figure}
- 
-    \end{block}
-}
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Methods}
 \frame{
 \frametitle{Methods}
 \begin{block}
 
-Give an overview of what our methods are:
+We will use the following methods to achieve our goals:
 \begin{itemize}
     \item Graph Representations
-    \item Ground Truth
     \item Feature Description
-    \item Machine Learning Methods
+    \item Extracting Ground Truth
+    \item Machine Learning 
 \end{itemize}
 \end{block}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Graph Representations}
 
 \begin{frame}[t]{Graph Representations}
-The graph, denoted as $G(t)=\{V(t),E(t)\}$, has the following three topology representations. $V(t)$ and $G(t)$ represent the set of vertices and edges at time t, respectively.
+We propose three possible representations for graph topology $G(t)=\{(V(t),E(t)\}$.
+$V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectively.
 
  \begin{columns}[t]
  
@@ -110,8 +118,9 @@ The graph, denoted as $G(t)=\{V(t),E(t)\}$, has the following three topology rep
    
  \end{columns}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
 
-\begin{frame}
 \frametitle{Ground Truth}
 
 \begin{minipage}[0.2\textheight]{\textwidth}
@@ -120,7 +129,7 @@ The graph, denoted as $G(t)=\{V(t),E(t)\}$, has the following three topology rep
     
     \begin{itemize}
     \begin{footnotesize}
-    \item The ground truth is defined as whether or not an atom is part of a fracture at a certain time step. Thus, $\textbf{y} \in \{0, 1\}^n$, where $n$ is the total number of atoms.
+    \item The ground truth is defined as whether or not an atom is part of a fracture at a certain time step.
     \item As the figure shows, some atoms are not highlighted in red, though they are on the fracture surface. So a K-nearest-neighbors algorithm will be applied to label those atoms.
     \end{footnotesize}  
     \end{itemize}
@@ -131,25 +140,9 @@ The graph, denoted as $G(t)=\{V(t),E(t)\}$, has the following three topology rep
     \end{column}
 \end{columns}
 \end{minipage}
-\end{frame}
-
-\frame{
-\frametitle{Feature Description}
-This slide is to talk about feature description
 }
 
-
-
-
-\subsection{Machine Learning Methods}
-\frame{
-\frametitle{Machine Learning Methods}
-Talk about machine learning methods!! yayyyyy
-
-
-}
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame
 {
 \frametitle{Voronoi Cell Volume}
@@ -170,16 +163,109 @@ Thus, the ground truth can be defined as:
 \end{block}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame
 {
-  \frametitle{Example of 3D Fracture}
-  \begin{block}{}
-
-\begin{figure}[h]
-				\centering
-				\includegraphics[width=.7\textwidth]{volcolor.png}
-				 \caption{Red atoms have a surrounding volume greater than the threshold}
-\end{figure}
- 
-    \end{block}
+\frametitle{Example of 3D Fracture}
+\begin{block}{}
+    \begin{figure}[h]
+			\centering
+			\includegraphics[width=.7\textwidth]{volcolor.png}
+			\caption{Red atoms have a surrounding volume greater than the threshold}
+    \end{figure}
+\end{block}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Machine Learning Methods}
+\frame{
+\frametitle{Machine Learning Methods}
+
+From the minutes
+
+Features are an important part of this section
+
+Physical features
+
+Local topological features
+
+Global topological features - read the SOW for an explanation of this , in section 5.2
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Physical Features}
+\begin{block}{}
+Move Voroni Cell slide here. 
+\end{block}
+
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Local Topological Features}
+\begin{block}{}
+\textbf{Number of bridging oxygen:} These features include number of bonds an atom holds as well as the Qn structure where an Si atom is surrounded by n bridging O atoms, each forming an Si–O–Si group.
+\end{block}
+
+\begin{block}{}
+k-th neighbor quantities. See SOW
+\end{block}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Global Topological Features}
+
+\begin{block}{}
+\textbf{Centrality Measures:} By constructing a graph representation of the silicate glass, we will be able to compute centrality measures that give an idea on how important certain atoms, are relative to the rest of the network.
+\end{block}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Machine Learning}
+
+\begin{block}{}
+Next few slides will be taken from the machine learning algorithm part of the SOW. 
+\end{block}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+
+\frame{
+\frametitle{See Demo video}
+\begin{frame}
+abc
+\includemovie[poster,autoplay,externalviewer, text={\small(Loading failure.mp4)}]{6cm}{6cm}{failure.mp4}
+% \includemedia
+% [
+%   activate=pageopen,
+%   width=200pt,height=150pt,
+%   addresource=bloch.mp4,
+% %   text={\small(Loading bloch.mp4)}
+%   flashvars={%
+%      source=bloch.mp4% same path as in addresource!
+%    &autoPlay=true%    % optional configuration
+%    &loop=true%        % variables
+%   } 
+%   ]{}{VPlayer.swf}
+
+  def
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{frame} }
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+

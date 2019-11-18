@@ -4,30 +4,50 @@
 {
 \frametitle{Background}
 \begin{block}{}
-A fundamental engineering challenge surrounding brittle materials is predicting failure. This involves predicting where fracture \textbf{nucleation} will occur as well as how these fractures \textbf{propagate}.
+A fundamental engineering challenge surrounding brittle materials is predicting failure. This involves predicting where fractures \textbf{nucleate} as well as how these fractures \textbf{propagate}.
 \newline
 \newline
 Researchers at Sandia National Laboratories have used Molecular Dynamics (MD) simulations to model the effects that cause nucleation and growth, but this is computationally intensive.
 \end{block}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \frame{
-\frametitle{About Our Sponsor}
-Talk about Sandia and Mark's work so far (include some things from his presentation?)
+\frametitle{ Sandia National Laboratories}
+\begin{minipage}[0.2\textheight]{\textwidth}
+\begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+    
+  \begin{block}{}
+    \textbf{Sandia's Interest:} Brittle materials are used throughout the stockpile. Examples include headers, electronic connectors, etc. 
+    \newline
+    \newline
+    \textbf{Challenge:} Make reliability predictions for components containing brittle materials. 
+  \end{block}
+    \end{column}
+    
+    \begin{column}{0.5\textwidth}
+    \includegraphics[width=5.5cm]{images/sandia.jpg}
+    \end{column}
+\end{columns}
+\end{minipage}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frame
 {
-\frametitle{The Goal}
+\frametitle{Motivation}
 \begin{block}{}
-The clinic aims to develop a model that rapidly predicts where fractures will form under different environmental conditions. These conditions include different types of stress and exposure to water.
+The clinic aims to develop a model that rapidly predicts where fractures will form silica-based glasses. We consider different environmental conditions including different boundary properties exposure to water.
 \newline
 \newline
-We will do this by training a supervised \textbf{Machine Learning (ML)} algorithm on MD simulation data, and by creating a \textbf{graph theoretic description} of the material.
+By creating a graph theoretic description of the material we will train a supervised \textbf{Machine Learning (ML)} algorithm on MD simulation data.
 \end{block}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frame
 {
@@ -86,38 +106,87 @@ We will do this by training a supervised \textbf{Machine Learning (ML)} algorith
 \shadedraw [ball color= white] (H) circle (0.3cm);
 \shadedraw [ball color= white] (I) circle (0.3cm);
 \end{tikzpicture}
-    \caption{Two silicon atoms (red)\\with surrounding oxygen atoms (grey) in tetrahedral configuration. A bridging oxygen is at the center, shared by the two tetrahedra.}
+    %\caption{Two silicon atoms (red)\\with surrounding oxygen atoms (grey) in tetrahedral configuration. A bridging %oxygen is at the center.}
+    
     \label{fig:tetrahedra}
 \end{figure}
+
+    {\bf SiO$_\mathbf{2}$}: Two silicon atoms (red)\\with surrounding oxygen atoms (grey) in tetrahedral configuration. A bridging oxygen is at the center.
+    
 		\end{column}
    		\begin{column}{.6\textwidth}
         \begin{block}{}
 		\begin{itemize} 
-        \item Possible hypothesis: nucleation is related to atomic-scale defects or chemical bond weakness in the glass
+        \item Nucleation is related to atomic-scale defects or chemical bond weakness in the glass
 		\begin{itemize} 
-        \item relationship between atomic structure and fracture behavior is complex 
+        \item The relationship between atomic structure and fracture behavior is complex 
 		\end{itemize}
-        \item Nucleation and propagation depend more on characteristics of the local structure surrounding an atom\\
+        \item Nucleation and propagation depend more on subtle characteristics of the local structure surrounding an atom\\
     \end{itemize}
     \end{block}
 		\end{column}
 	\end{columns}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Previous Work}
 \frame
-{\frametitle{MD Simulations}
-Here we will talk about the MD Simulations that Sandia has done, and how that is needed for our ML model
+{\frametitle{Molecular Dynamics Simulations}
+\begin{block}{}
+Molecular dynamics (MD) methods simulate the system at the nanoscale and model the individual chemical and physical interactions taking place in the material.
+\newline
+\newline
+These simulations have successfully predicted a wide range of detailed
+properties that cannot be obtained with continuum methods, and that are
+consistent with experimental observations.
+\end{block}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \frame
-{\frametitle{Past Clinic Work}
-Here we will talk about previous work done by the other CGU clinic and what insight that work has given us
+{
+\frametitle{LAMMPS}
+\begin{block}{} 
+
+Sandia has developed molecular dynamics simulation software Large-scale Atomic/Molecular Massively Parallel Simulator.
+
+Simulations are generated using the LAMMPS code. Each LAMMPS run simulates a sample of SiO2 containing approximately 70,000 atoms.
+\end{block}
 }
 
-\subsection{Clinic Goals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\subsection{Math Clinic Goals}
+\frame
+{\frametitle{Objective}
+\begin{block}{}
+\begin{itemize}
+    \item Develop supervised learning methods, trained on MD simulation data, that generate rapid predictions of where and when atomic-scale fractures occur in samples of silicate glasses under stress. 
+
+\item Generate predictions under multiple environmental conditions, validate on existing MD simulation results. 
+
+\item Relate predictions to specific features characterizing local atomic structure.
+
+\item Provide new insight into how local structure leads to fracture and failure.
+\end{itemize}
+\end{block}
+}
+
 \frame
 {\frametitle{Goals}
-Here we will talk about what our goals are
+\begin{block}{}
+
+\textbf{Goal 1:} Predict fracture nucleation events.
+\newline
+\newline
+
+\textbf{Goal 2:} Predict fracture propagation.
+
+\end{block}
 }
