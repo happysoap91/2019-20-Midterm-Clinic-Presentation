@@ -1,9 +1,3 @@
-
-
-
-
-
-
 \section{Model}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Data}
@@ -15,16 +9,14 @@
     \item
 Sandia has provided MD simulation results which we will use as training data for our ML models. 
 \end{itemize}
-
-
 \end{block}
 
 \begin{block}{}
 \begin{itemize}
-    \item The two types of simulations are:
+    \item Two types of boundary conditions for simulations:
     \begin{itemize}
-        \item Free Surfaces
         \item Fully Periodic
+        \item Free Surfaces
     \end{itemize}
 \end{itemize}
 \end{block}
@@ -32,43 +24,58 @@ Sandia has provided MD simulation results which we will use as training data for
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame
 {
-\frametitle{Features}
+\frametitle{Descriptors}
 \begin{block}{}
-Data includes features such as:
+Data includes descriptors such as:
 \begin{itemize}
     \item $x, y, z$ coordinates for each atom
     \item charge
     \item stress tensor
     \item bond connectivity
     \item newly formed/broken bonds
-    \item Coordination Number
-    \item Number of Bridging Oxygens
-    \item Volume Surrounding atom
+    \item Coordination number
+    \item Number of bridging oxygens
+    \item Volume surrounding atom
 \end{itemize}
 \end{block}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Methods}
+\subsection{Representations}
 \frame{
-\frametitle{Methods}
-\begin{block}
+\frametitle{Representations}
 
-We will use the following methods to achieve our goals:
-\begin{itemize}
+\begin{minipage}[0.2\textheight]{\textwidth}
+\begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+    \vspace{2em}
+    To achieve our goals, we will use the following representations to build the machine learning model:
+    \begin{itemize}
     \item Graph Representations
     \item Feature Description
+    \begin{itemize}
+        \item Local Topological Feature
+        \item Global Topological Feature
+        \item Physical Feature
+    \end{itemize}
     \item Extracting Ground Truth
-    \item Machine Learning 
-\end{itemize}
-\end{block}
+    \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.5\textwidth}
+    \vspace{2em}
+    \includegraphics[width=5.5cm]{images/rep.png}
+    \end{column}
+\end{columns}
+\end{minipage}
 }
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \begin{frame}[t]{Graph Representations}
-We propose three possible representations for graph topology $G(t)=\{(V(t),E(t)\}$.
-$V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectively.
+We propose three possible graph representations $G(t)=(V(t),E(t))$, where
+$V(t)$ and $E(t)$ represent the set of vertices and edges at time $t$, respectively.
 
  \begin{columns}[t]
  
@@ -76,8 +83,8 @@ $V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectivel
    \begin{block}{Basic Graph}
    \begin{itemize}
    \begin{footnotesize}
-       \item V: Si, O atoms
-       \item E: Chemical bond between atoms
+       \item $V$: Si, O atoms
+       \item $E$: Chemical bond between atoms
     \end{footnotesize}
     \end{itemize}
     \begin{figure}
@@ -90,8 +97,8 @@ $V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectivel
    \begin{block}{Reduced Graph}
    \begin{itemize}
    \begin{footnotesize}
-       \item V: Si atoms
-       \item E: Bridging Oxygens
+       \item $V$: Si atoms
+       \item $E$: Bridging oxygens
     \end{footnotesize}
    \end{itemize}
     \begin{figure}
@@ -104,8 +111,8 @@ $V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectivel
    \begin{block}{Topological Graph}
    \begin{itemize}
    \begin{footnotesize}
-       \item V: Rings(closed paths)
-       \item E: Bridging oxygen
+       \item $V$: Rings (closed paths)
+       \item $E$: Bridging oxygen
     \end{footnotesize}
    \end{itemize}
     \begin{figure}
@@ -118,10 +125,92 @@ $V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectivel
    
  \end{columns}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame
+{\frametitle{Feature Description}
+\begin{block}{}
+\begin{itemize}
+    \item Local Topological Features
+    \item Global Topological Features
+    \item Physical Features
+\end{itemize}
+
+\end{block}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Example of Local Topological Features}
+\begin{block}{}
+\textbf{Number of Bridging Oxygens:} In a Q$_n$ unit, an Si atom is surrounded by $n$ bridging O atoms, each forming an Si–O–Si group. The value of $n$ supplies crucial network connectivity information.
+\begin{itemize}
+    \item The number of bridging oxygens is equivalent to the degree of a vertex
+    \item ML algorithms benefit from having bridging oxygens as an explicit feature
+\end{itemize}
+\end{block}
+
+%\begin{block}{}
+%k-th neighbor quantities. %See SOW
+%\end{block}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{
+\frametitle{Example of Global Topological Features}
+
+\begin{minipage}[0.2\textheight]{\textwidth}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+   \textbf{Centrality Measures:}
+quantify importance of an atom, relative to the rest of the network.
+
+\bigskip
+
+\begin{itemize}
+    \item \textbf{Eigenvector Centrality}: High degree $\neq$ central role
+    \item \textbf{Betweenness Centrality}: reflects node's importance in communication across graph
+    \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.5\textwidth}
+    \includegraphics[width=5.5cm]{centrality.png}
+    \end{column}
+\end{columns}
+\end{minipage}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame
+{
+\frametitle{Example of Physical Features}
+
+
+\begin{minipage}[0.2\textheight]{\textwidth}
+\begin{columns}
+    \begin{column}{0.6\textwidth}
+    \begin{itemize}
+    \item The \textbf{Voronoi cell volume, $v_i$}, is a local density measure. It measures how large the empty space is surrounding an atom $i$.
+    \item Standardized cell volume, $\hat{v_i}$, can help filter out the affine displacement introduced by pulling the glass uni-axially.
+    \newline
+    $$\hat{v_i} = \frac{(v_i - \mu_v)}{\sigma_v}$$
+    \newline
+    \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.5\textwidth}
+%    \vspace{4em}
+    \includegraphics[width=5.5cm]{images/voronoi.png}
+    \end{column}
+\end{columns}
+\end{minipage}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame{
 
-\frametitle{Ground Truth}
+\frametitle{Extracting Ground Truth}
 
 \begin{minipage}[0.2\textheight]{\textwidth}
 \begin{columns}[T]
@@ -129,13 +218,22 @@ $V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectivel
     
     \begin{itemize}
     \begin{footnotesize}
-    \item The ground truth is defined as whether or not an atom is part of a fracture at a certain time step.
-    \item As the figure shows, some atoms are not highlighted in red, though they are on the fracture surface. So a K-nearest-neighbors algorithm will be applied to label those atoms.
+    \item 
+    If $\hat{v_i} = \frac{(v_i - \mu_v)}{\sigma_v}$ exceeds a certain threshold, then atom $i$ is defined as part of a nucleation event. We define ground truth label as:
+    $$
+    y_i = \begin{cases}
+      0 & \text{if }{\hat{v_i} \le 3} \\
+      1 & \text{if }{\hat{v_i} \ge 3} \\
+    \end{cases} 
+    $$
+    %%%%%%ground truth%%%%%%
+    \item A K-nearest-neighbors algorithm will be applied to label those false-negative atoms.
     \end{footnotesize}  
     \end{itemize}
     \end{column}
     
     \begin{column}{0.5\textwidth}
+    \vspace{3em}
     \includegraphics[width=5.5cm]{images/face.png}
     \end{column}
 \end{columns}
@@ -143,123 +241,106 @@ $V(t)$ and $E(t)$ represent the set of vertices and edges at time t, respectivel
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame
-{
-\frametitle{Voronoi Cell Volume}
-\begin{block}{}
-We also define the ground truth using a local density measure that we call the \textbf{Voronoi cell volume, $v_i$}, around a certain atom $i$. It is the empty space surrounding an atom.
-\newline\newline
-If $v_i$ exceeds a certain threshold, then the atom $i$ is defined as part of a nucleation event. Thus, $y_i = 1$.
-\newline\newline
-The threshold:
-\centering $nuc_v = \frac{(v_i - \mu_v)}{\sigma_v}$
-Thus, the ground truth can be defined as:
-    \[
-    y_i = \begin{cases}
-      0 & \text{if }(nuc_v)_i \le 1 \\
-      1 & \text{if }(nuc_v)_i > 1 \\
-    \end{cases} 
-    \]
-\end{block}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame
-{
-\frametitle{Example of 3D Fracture}
-\begin{block}{}
-    \begin{figure}[h]
-			\centering
-			\includegraphics[width=.7\textwidth]{volcolor.png}
-			\caption{Red atoms have a surrounding volume greater than the threshold}
-    \end{figure}
-\end{block}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Machine Learning Methods}
+\subsection{Machine Learning}
 \frame{
 \frametitle{Machine Learning Methods}
 
-From the minutes
+\begin{block}{}
+Objective is to produce surrogate model of MD simulations using supervised learning.
 
-Features are an important part of this section
-
-Physical features
-
-Local topological features
-
-Global topological features - read the SOW for an explanation of this , in section 5.2
+\begin{itemize}
+    \item Use ensemble-based methods such as {\bf random forest} (RF) to predict nucleation at fixed future time step, given $t=0$ feature values.
+    \item Use {\bf recurrent neural networks} (RNN) to learn dynamics of fracture propagation.
+\end{itemize}
+\end{block}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{
-\frametitle{Physical Features}
-\begin{block}{}
-Move Voroni Cell slide here. 
-\end{block}
 
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \frame{
-\frametitle{Local Topological Features}
-\begin{block}{}
-\textbf{Number of bridging oxygen:} These features include number of bonds an atom holds as well as the Qn structure where an Si atom is surrounded by n bridging O atoms, each forming an Si–O–Si group.
-\end{block}
+\frametitle{Ensemble methods}
+
+{\bf Ensemble-based methods} predict atom labels by combining predictions from multiple estimators, learned from training data.
+
+\medskip
 
 \begin{block}{}
-k-th neighbor quantities. See SOW
-\end{block}
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{
-\frametitle{Global Topological Features}
 
-\begin{block}{}
-\textbf{Centrality Measures:} By constructing a graph representation of the silicate glass, we will be able to compute centrality measures that give an idea on how important certain atoms, are relative to the rest of the network.
-\end{block}
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame{
-\frametitle{Machine Learning}
-
-\begin{block}{}
-Next few slides will be taken from the machine learning algorithm part of the SOW. 
+\begin{itemize}
+    \item Bagging: {\bf random forest}.
+    \begin{itemize}
+        \item Estimators are decision trees constructed based on feature subsets drawn randomly with replacement.
+        \item Labels determined by majority vote among decision trees.
+    \end{itemize}
+    
+    \medskip
+    
+    \item Boosting: {\bf adaboost}.
+    \begin{itemize}
+        \item Estimators are classifiers based on individual features.
+        \item Labels determined by weighted sum of classifier outputs, 
+        weights updated successively to improve prediction accuracy.
+    \end{itemize}
+\end{itemize}
 \end{block}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-
-
-
-
-
 \frame{
-\frametitle{See Demo video}
-\begin{frame}
-abc
-\includemovie[poster,autoplay,externalviewer, text={\small(Loading failure.mp4)}]{6cm}{6cm}{failure.mp4}
-% \includemedia
-% [
-%   activate=pageopen,
-%   width=200pt,height=150pt,
-%   addresource=bloch.mp4,
-% %   text={\small(Loading bloch.mp4)}
-%   flashvars={%
-%      source=bloch.mp4% same path as in addresource!
-%    &autoPlay=true%    % optional configuration
-%    &loop=true%        % variables
-%   } 
-%   ]{}{VPlayer.swf}
+\frametitle{Recurrent Neural Networks}
 
-  def
+RNN trains on an entire time series, learning dynamics of a process which it stores using a ``memory'' of internal states.
 
+\begin{center}
+\begin{figure}[!b]
+
+\includegraphics[width=11.5cm , height = 3.5cm]{images/rnn.PNG}
+
+\end{figure}
+\end{center}
+
+Training input is time series of features from MD simulation data.
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\frame{
+\frametitle{Recurrent Neural Networks}
+\begin{block}{}
+\begin{itemize}
+    \item In training, RNN uses information from all times up to time step $t$, to output feature values and ground truth labels for time $t+1$.
+    \begin{itemize}
+        \item {\bf Long Short-Term Memory} (LSTM) mechanism gives added weight to information from more recent time steps.
+    \end{itemize}
+    \item Loss function describes difference between output values and training data.
+    \item Neural network weights updated successively, to minimize loss function and improve prediction accuracy.
 
-\end{frame} }
+\end{itemize}
+\end{block}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame{
+\frametitle{Proposed Architecture}
+
+\begin{center}
+\begin{figure}[!b]
+    \centering
+    \noindent
+\includegraphics[width=4.5cm , height = 6cm]{images/arch.PNG}
+
+Machine Learning Architecture
+
+\end{figure}
+\end{center}
+
+}
+
+
+
+
+
+
+
 
 
 
